@@ -1,0 +1,22 @@
+{
+  "name": "population-game",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "This is a version of the population game I created way back in 2013, from an idea I had in 2005. At the time, I had wanted to create a simple and fun project to put into application my knowledge around manipulating global, instance, and inherited data within a single ecosystem.",
+  "main": "public/index.html",
+  "scripts": {
+    "dev": "npx http-server ./public",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/strakers/population-game.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/strakers/population-game/issues"
+  },
+  "homepage": "https://github.com/strakers/population-game#readme"
+}

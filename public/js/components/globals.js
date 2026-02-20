@@ -1,3 +1,4 @@
+import { Person } from "./classes.js";
 
 /*
 ===================================================================================================================================================
@@ -5,16 +6,16 @@
 ===================================================================================================================================================
 */
 
-var System = {
-	
+export var System = {
+
 	generateID : function( person ){
-		var id = Math.floor(Math.random() * 1e16).toString(36), 
+		var id = Math.floor(Math.random() * 1e16).toString(36),
 			prefix1 = person.name.split(' ').map(function(o){ return o.substr(0,1).toLowerCase(); }).join(''),
-			prefix2 = person.gender.toLowerCase();
+			prefix2 = person.gender.toLowerCase(),
 			prefix3 = person.birthDay()*1;
 		return prefix1 + prefix2 + prefix3 + id;
 	},
-	
+
 	makeSlug: function( str ){
 		return str
 			.toLowerCase()
@@ -22,7 +23,7 @@ var System = {
 			.replace(/ +/g,'-')
         ;
 	},
-	
+
 	firstNames: function( s ){
 		s=s%2;
 		names = [
@@ -36,9 +37,9 @@ var System = {
 		return names[s];
 	},
 	Time : new (function(int){
-		
+
 		var interval = int, month = 0, year = 0, months = 'Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec'.split('|'), timer, events;
-		
+
 		events = {
 			0 : [],
 			1 : [],
@@ -53,65 +54,65 @@ var System = {
 			10 : [],
 			11 : []
 		}
-		
-		this.nextMonth = function(){ 
-			++month; 
-			if(month === 12){ ++year; month = 0; } 
-			
+
+		this.nextMonth = function(){
+			++month;
+			if(month === 12){ ++year; month = 0; }
+
 			//affect of time on people
 			_.mapValues(world.personDatabase(), function(p,i){
 				// age increment -- if(month===p.birthDay().getMonth()){ p.growOlder(); console.log( 'Happy Birthday '+p.getName()+'!' ); }
 				// pregnancy increment
 				if(p['isPregnant']&&p.isPregnant())p.pregnancyNextStage();
 				// month listener fn increment call
-				
-			}); 
+
+			});
 			var schedule = events[month], i = 0, e = null;
 			for(i=0,e=null;i<schedule.length;++i){
 				e = schedule[i];
 				if(typeof e.data !== 'object') e.data = {};
-				
+
 				switch(e.type){
-					case 'birthday' : 
+					case 'birthday' :
 						e.target.growOlder();
 						console.log( 'Happy Birthday '+e.target.getName()+'!' );
 					break;
-					
-					case 'pregnancy' : 
+
+					case 'pregnancy' :
 						if(e.target['isPregnant']&&e.target.isPregnant())e.target.pregnancyNextStage();
 						e.data['months'] = e.target.pregnancyStage();
 					break;
-					
-					case 'anniversary' : 
+
+					case 'anniversary' :
 						if(e.data['spouse']) console.log( 'Happy Anniversary to '+e.target.getName()+' and '+e.data.spouse.getName()+'!' );
 					break;
-					
-					case 'income' : 
-						if(e.data['amount']){ 
-							console.log( e.target.getName()+' received $'+e.data.amount.toFixed(2)+'!' ); 
+
+					case 'income' :
+						if(e.data['amount']){
+							console.log( e.target.getName()+' received $'+e.data.amount.toFixed(2)+'!' );
 							// e.target.getMoney( e.data.amount );
 						}
 					break;
-					
-					case 'expense' : 
-						if(e.data['amount']){ 
-							console.log( e.target.getName()+' spent $'+e.data.amount.toFixed(2)+( e.data['expense'] ? ' on '+ e.data['expense']: '' )+'!' ); 
+
+					case 'expense' :
+						if(e.data['amount']){
+							console.log( e.target.getName()+' spent $'+e.data.amount.toFixed(2)+( e.data['expense'] ? ' on '+ e.data['expense']: '' )+'!' );
 							// e.target.spendMoney( e.data.amount, e.data['expense'] );
 						}
 					break;
-					
-					case 'funeral' : 
+
+					case 'funeral' :
 						// same month as pass away
-						// gather friends (on random 4:5) to goTo 
+						// gather friends (on random 4:5) to goTo
 					break;
 				}
 				if(typeof e.persist === 'number') e.persist--;
 			}
 			console.log("-------------------------------\n",(2013+year)+'-'+month,'{ year : '+year+' , month : '+month+' }')
 			events[month] = _.filter(schedule,'persist'); // remove non-persistant or expired events
-			return this; 
+			return this;
 		}
-		
+
 		this.getSchedule = function(n){ if(n&&n<12) return events[n]; else return events; }
 		this.registerEvent = function( month, slug, persist, target, eventType, eventData ){
 			if(typeof month === 'number' && month < 12){
@@ -120,34 +121,34 @@ var System = {
 			return this;
 		}
 		this.removeEvent = function( month, slug, target, eventType, eventData ){
-			
+
 			var query = {};
 			if(typeof month !== 'number' || month < 0) return;
 			if(typeof slug === 'string') query.slug = slug;
 			if(target && typeof target === 'object') query.target = target;
 			if(typeof eventType === 'string') query.type = eventType;
 			if(eventData && typeof eventData === 'object') query.data = eventData;
-			
+
 			_.remove(events[month],query);
-			
+
 			return this;
 		}
-		
-		this.prevMonth = function(){ month--; if(month < 0){ year--; month = 11; } return this; }		
+
+		this.prevMonth = function(){ month--; if(month < 0){ year--; month = 11; } return this; }
 		this.nextYear = function(){ year++; return this; }
 		this.prevMonth = function(){ year--; return this; }
-		
-		this.getMonth = function(){ return month; }		
+
+		this.getMonth = function(){ return month; }
 		this.getMonthName = function(){ return months[month]; }
-		this.getYear = function(){ return year; }		
+		this.getYear = function(){ return year; }
 		this.getDate = function(){ return new Date( year+2013, month, 1 ); }
-		
+
 		this.startTimer = function(delay){ delay = delay || interval || 10000; timer = setInterval( this.nextMonth, delay ); return this; }
 		this.stopTimer = function(){ clearInterval( timer ); return this; }
 		this.getTimer = function(){ return timer; }
-		
+
 		this.startTimer();
-		
+
 	})(20000)
 }
 
@@ -158,13 +159,13 @@ var System = {
 ===================================================================================================================================================
 */
 
-function makeHolder( person ){
+export function makeHolder( person ){
 	if( person.constructor == Person ){
 		var div = document.createElement("div");
 		document.getElementById('people').appendChild( div );
-		
-		div.className = "person " + (person.isMale() ? "M" : "F"); 
-		
+
+		div.className = "person " + (person.isMale() ? "M" : "F");
+
 		/*
 		div.style.borderWidth = 1 + "px";
 		div.style.borderColor = "black";
@@ -174,9 +175,9 @@ function makeHolder( person ){
 		div.style.borderStyle = Math.floor(Math.random() * 5) % 2 == 0 ? "dotted" : "solid";
 		div.style.width = person.
 		div.style.height = person.getAge() + 20 + "px";
-		div.style.padding = 10; 
+		div.style.padding = 10;
 		*/
-		
+
 		div.style.float = "left";
 		div.style.backgroundColor = person.getComplexion();
 		div.setAttribute('data-name',person.name);
@@ -191,8 +192,8 @@ function makeHolder( person ){
 		}
 		div.ondrop = function(e){
 			e.preventDefault();
-			var name = e.dataTransfer.getData("person"), 
-				person = world.getPerson(name), 
+			var name = e.dataTransfer.getData("person"),
+				person = world.getPerson(name),
 				dragTarget = person.body,
 				dropTarget = e.target,
 				child;
@@ -204,14 +205,14 @@ function makeHolder( person ){
 		//div.innerHTML = person.name;
 		div.onclick = function(){ alert( person.toString() ); if( div.essence.name === 'Rob Ford' ) alert ('Drunken stupor...'); };
 		div.essence = person;
-		
+
 		if( div.essence.getLocation() ){
 			flag = document.createElement("div");
 			flag.className = 'flag '+ ( div.essence.getLocation().name == 'United States of America' ? 'usa' : div.essence.getLocation().name.toLowerCase() );
 			div.innerHTML = '';
 			div.appendChild(flag);
 		}
-		
+
 		return div;
 	}
 }
@@ -223,12 +224,12 @@ function makeHolder( person ){
 ===================================================================================================================================================
 */
 
-var countries = [
-	{ 
-		name: "Canada" , 
+export var countries = [
+	{
+		name: "Canada" ,
 		children: [
 			{
-				name: "Ontario",				
+				name: "Ontario",
 				children: [
 					{
 						name: "Toronto"
@@ -245,7 +246,7 @@ var countries = [
 				]
 			},
 			{
-				name: "Quebec",				
+				name: "Quebec",
 				children: [
 					{
 						name: "Montreal"
@@ -256,7 +257,7 @@ var countries = [
 				]
 			},
 			{
-				name: "Alberta",				
+				name: "Alberta",
 				children: [
 					{
 						name: "Calgary"
@@ -265,11 +266,11 @@ var countries = [
 			}
 		]
 	},
-	{ 
-		name: "United States of America" , 
+	{
+		name: "United States of America" ,
 		children: [
 			{
-				name: "New York",				
+				name: "New York",
 				children: [
 					{
 						name: "Buffulo"
@@ -283,7 +284,7 @@ var countries = [
 				]
 			},
 			{
-				name: "Pennsylvania",				
+				name: "Pennsylvania",
 				children: [
 					{
 						name: "Philidelphia"
@@ -291,7 +292,7 @@ var countries = [
 				]
 			},
 			{
-				name: "New Jersey",				
+				name: "New Jersey",
 				children: [
 					{
 						name: "Newark"
@@ -301,3 +302,7 @@ var countries = [
 		]
 	}
 ]
+
+export default {
+	System, makeHolder, countries,
+}

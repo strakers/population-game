@@ -1,15 +1,16 @@
+import { System, makeHolder } from "./globals.js";
 
-function World(){
-	var universe = window, 
-		people = [], 
-		personID = {}, 
+export function World(){
+	var universe = window,
+		people = [],
+		personID = {},
 		locations = [],
-		locationID = {},  
-		countries = [], 
-		countryID = {}, 
+		locationID = {},
+		countries = [],
+		countryID = {},
 		cities = [],
 		cityID = {};
-		
+
 	this.addPerson = function(){
 		var args = Array.prototype.slice.apply(arguments)||[];
 		//if(!args[0]) return this; console.log('world.addPerson','args',args);
@@ -21,9 +22,9 @@ function World(){
 				personID[person.name] = person; /* handles only 1 person with same name */
 			}
 			return person;
-		} else {			
+		} else {
 			function P( Args ){ return Person.apply(this, Args); }
-			P.prototype = Person.prototype;			
+			P.prototype = Person.prototype;
 			person = new P(arguments);
 			if(!personID[person.name]){
 				people.push(person);
@@ -44,7 +45,7 @@ function World(){
 			}
 			return location;
 		} else {
-			function L(arguments){ return Location.apply(this, arguments); }
+			function L(args){ return Location.apply(this, args); }
 			L.prototype = Location.prototype;
 			location = new L( [args[0],this] );
 			if(!locationID[location.name]){
@@ -52,11 +53,11 @@ function World(){
 				locationID[location.name] = location; /* handles only 1 location with same name */
 			}
 			return location;
-		} 
+		}
 		/**/ console.log( 'this is world', arguments[0], arguments[1] );
 	}
 	this.removeLocation = function( location ){
-		
+
 	}
 	this.personArrive = function( person ){
 		if(this !== person.getLocation()){
@@ -94,7 +95,7 @@ function World(){
 			recurse = function( locArray ){
 				if(locArray.constructor == Array){
 					for(var i=0;i<locArray.length;++i){
-						if( locArray[i].constructor == Location && typeof locArray[i]['listLocations'] == "function" ){ 
+						if( locArray[i].constructor == Location && typeof locArray[i]['listLocations'] == "function" ){
 							locs.push( locArray[i] );
 							recurse( locArray[i].listLocations() );
 						}
@@ -116,7 +117,7 @@ function World(){
 			var newpar;
 			if( par.constructor !== World && par.constructor !== Location ) return;
 			if( obj.constructor === Array.prototype.constructor ){
-				for(var c in obj){ 
+				for(var c in obj){
 					if( typeof obj[c] !== 'object' ) continue;
 					if( obj[c].constructor === Array.prototype.constructor ) continue;
 					if( !obj[c].name ) continue;
@@ -125,18 +126,18 @@ function World(){
 					if( !!obj[c].children && obj[c].children.constructor === Array.prototype.constructor ){
 						compile( obj[c].children, newpar );
 						newpar = undefined;
-					}		
+					}
 					n++;	*/
 					compile( obj[c], par );
 				}
 			} else if( typeof obj === 'object' ) {
-				if( !obj.name ) return;
+				if (!obj.name) return;
 				newpar = par.addLocation( obj.name ); /* indicator */ n++;
 				var txt = document.createElement( "p" ); txt.innerHTML = par.name + " > " + obj.name + "<br />";
 				//document.getElementById('locations').appendChild( txt );
 				if( !!obj.children && obj.children.constructor === Array.prototype.constructor ){
 					compile( obj.children, newpar );
-				}					
+				}
 			}
 		}
 		compile( group, this );
@@ -156,13 +157,13 @@ function World(){
 	}
 }
 
-function Location ( name, parentLocation ){
+export function Location ( name, parentLocation ){
 	var locations = [], locationID = {}, people = [], personID = {}, _super, departures = [], arrivals = [];
-	_super = parentLocation; moo = parentLocation; 
+	_super = parentLocation;
 	//if(!!_super && _super.constructor != World && _super.constructor != Location ) return { error: "LocationError", args: [name,parentLocation] };
 	this.name = name;
 	//this.parent = _super; // will consider if is wise to expose publicly
-	if(_super['addLocation']){ _super.addLocation( this, _super ); }
+	if(_super && Object.hasOwn(_super, 'addLocation')){ _super.addLocation( this, _super ); }
 	this.addLocation = function(){ /*
 		if( place.constructor == Location ){
 			if(!locationID[ place.name ]){
@@ -171,7 +172,7 @@ function Location ( name, parentLocation ){
 				_super.addLocation( place, this );
 			}
 		}
-		return place;*/		
+		return place;*/
 		var args = Array.prototype.slice.apply(arguments);
 		if(!args[0]) return this;
 		var location;
@@ -180,21 +181,21 @@ function Location ( name, parentLocation ){
 			if(!locationID[location.name]){
 				locations.push(location);
 				locationID[location.name] = location; /* handles only 1 location with same name */
-			} 
+			}
 			return location;
 		} else {
-			function L(arguments){ return Location.apply(this, arguments); }
+			function L(args){ return Location.apply(this, args); }
 			L.prototype = Location.prototype;
 			location = new L( [args[0],this] );
 			if(!locationID[location.name]){
 				locations.push(location);
 				locationID[location.name] = location; /* handles only 1 location with same name */
-			} 
+			}
 			return location;
-		} 
+		}
 	}
 	this.removeLocation = function( lcoation ){
-		
+
 	}
 	this.addPerson = function(){ /*
 		if( person.constructor == Person ){
@@ -216,10 +217,10 @@ function Location ( name, parentLocation ){
 			}
 			_super.addPerson( person );
 			return person;
-		} else {			
+		} else {
 			function P( Args ){ return Person.apply(this, Args); }
-			P.prototype = Person.prototype;			
-			person = new P(arguments);			
+			P.prototype = Person.prototype;
+			person = new P(arguments);
 			if(!personID[person.name]){
 				people.push(person);
 				personID[person.name] = person; /* handles only 1 person with same name */
@@ -265,10 +266,10 @@ function Location ( name, parentLocation ){
 		if(person.constructor == Person){
 			var i, p;
 			for(i in people){
-				if( people[i] == person ){ 
+				if( people[i] == person ){
 					p = people.splice(i,1);
 					departures.push( { person: person, destination: destinationLocation, time: new Date() } );
-					return people.splice(i,1); 
+					return people.splice(i,1);
 				}
 			}
 			console.log( person.name + ' is not here...' )
@@ -279,7 +280,7 @@ function Location ( name, parentLocation ){
 			var isNewPerson = true, i;
 			for(i in people){
 				if( people[i] == person ){ isNewPerson = false; break; }
-			}			
+			}
 			if( isNewPerson ){
 				if(!personID[person.name]) personID[person.name] = person;
 				people.push(person);
@@ -291,7 +292,7 @@ function Location ( name, parentLocation ){
 	}
 }
 
-function Person( name, gender, age, weight, birthLocation, birthDate, color ){
+export function Person( name, gender, age, weight, birthLocation, birthDate, color ){
 	var friendsID = {}, friendsList = [],
 		nameParts = [],
 		nicknames = [],
@@ -314,7 +315,7 @@ function Person( name, gender, age, weight, birthLocation, birthDate, color ){
 		systemID,
 		_defaults,
 		_r = function( maxNumber ){ return Math.floor(Math.random()*maxNumber); },
-		_rv = function( arr, level ){ 
+		_rv = function( arr, level ){
 			if( arr.length ){
 				var r =  _r(arr.length), n;
 				switch( level ){
@@ -324,12 +325,12 @@ function Person( name, gender, age, weight, birthLocation, birthDate, color ){
 					case 1: arr.length - r + _r( arr.length - r*(r%2) );
 					default: break;
 				}
-				return arr[ r ]; 
+				return arr[ r ];
 			}
 			return null;
 		}
 		;
-	
+
 	/* object property assignment */
 	if( typeof arguments[0] === "object" && arguments[0].constructor !== Array.prototype.constructor ){
 		var props = arguments[0];
@@ -342,25 +343,25 @@ function Person( name, gender, age, weight, birthLocation, birthDate, color ){
 		birthDate = props.birthDate || null;
 		color = props.complexion || null;
 		father = props.father || null;
-	}		
-		
+	}
+
 	this.gender = gender || (_r(4)%2==1?"M":"F");
 	this.name = name || _rv( System.firstNames(this.gender === "F") ) + " " + (father ? father.lastName() : _rv(System.firstNames(2)));
 	nameParts = this.name.split(' ');
 	this.weight = weight || _r(6) + 5;
-	
+
 	complexion = color || Math.floor(Math.random()*16777215);
 	if(typeof complexion === "number") complexion = complexion.toString(16);
 	if(complexion.length < 6) complexion = "0"+complexion;
 	birthplace = birthLocation;
 	birthday = birthDate || ( age == 0 ? new Date() : new Date( (new Date()).getFullYear() - age, Math.floor(Math.random()*11), Math.floor(Math.random()*27)+1 ) );
-		
+
 	if( typeof birthplace == "string" && !world.findLocation( birthplace ) ){
 		birthplace = world.addLocation( birthplace );
 	}
 	if( !!birthplace && birthplace.constructor != Location ) birthplace = null;
 	currentLocation = birthplace;
-	
+
 	this.isAlive = function(){ return isAlive === true; }
 	this.isMale = function(){ return this.gender == "M"; }
 	this.isFemale = function(){ return this.gender == "F"; }
@@ -368,9 +369,9 @@ function Person( name, gender, age, weight, birthLocation, birthDate, color ){
 	this.knows = function( person ){ return !!( person.constructor == Person && friendsID[person.name] && person === friendsID[person.name]); }
 	this.getName = function( type ){ switch( type ){ default: return this.name; case 1: return nameParts[0]; case 2: return nameParts[nameParts.length-1]; } }
 	this.systemID = function(){ return systemID; }
-	
+
 	System.Time.registerEvent( birthday.getMonth(), this.getName(), true, this, 'birthday' );
-	
+
 	this.goTo = function( newLocation ){
 		if(newLocation.constructor == Location){
 			previousLocation = currentLocation;
@@ -390,48 +391,48 @@ function Person( name, gender, age, weight, birthLocation, birthDate, color ){
 	}
 	this.getLocation = function(){ return currentLocation; }
 	this.birthDay = function(){ return new Date( (new Date()).getFullYear(), birthday.getMonth(), birthday.getDay() ); /*, currDay = new Date(); */ }
-	
+
 	this.getComplexion = function(getNumber){ // console.log('inperson-color',complexion,this.name);
-		if(getNumber) return ("0x"+complexion)*1; 
+		if(getNumber) return ("0x"+complexion)*1;
 		else return "#"+complexion;
-		if(complexion.substr(0,1)=="#") return complexion.substr(1); else return complexion; 
+		if(complexion.substr(0,1)=="#") return complexion.substr(1); else return complexion;
 	}
 	this.getAge = function(){ return age||0; }
-	this.growOlder = function(x){ 
-		if(isAlive){  
+	this.growOlder = function(x){
+		if(isAlive){
 			age++;
-			if(this.getAge() > (70+_r(11)+_r(10)+_r(9)+_r(8))) this.passAway(); 
+			if(this.getAge() > (70+_r(11)+_r(10)+_r(9)+_r(8))) this.passAway();
 		}
-		return this; 
+		return this;
 	}
 	this.addNickname = function( name ){ nicknames.push( name ); return this; }
 	this.getNicknames = function( name ){ return nicknames.join( ", " ); }
 	this.lastName = function(){ return nameParts[ nameParts.length - 1 ]; }
-	this.greet = function( person, msg ){ 
-		if(!person || person.constructor == Person){ 
-			if(isAlive){ 
+	this.greet = function( person, msg ){
+		if(!person || person.constructor == Person){
+			if(isAlive){
 				if(typeof msg == 'function') msg = msg(person);
-				alert("["+this.name+"]: "+ greetings[_r(greetings.length-1)] + (person?" "+person.getName(1):".") +"."+ (msg?" "+msg:"") ); 
+				alert("["+this.name+"]: "+ greetings[_r(greetings.length-1)] + (person?" "+person.getName(1):".") +"."+ (msg?" "+msg:"") );
 			} else {
-				alert("["+this.name+"]: Grrr... arg..."); 
+				alert("["+this.name+"]: Grrr... arg...");
 			}
 		}
-		return this; 
+		return this;
 	}
 	this.introduceSelf = function(){ if(isAlive) alert( (_r(3)%2==0?"My name is ":"I'm ") + this.name ); return this; }
-	this.meet = function( stranger , location ){ 
+	this.meet = function( stranger , location ){
 		if(isAlive && stranger.constructor == Person) {
-			if(!friendsID[ stranger.name ] && friendsID[ stranger.name ] != stranger.name){ 
+			if(!friendsID[ stranger.name ] && friendsID[ stranger.name ] != stranger.name){
 				var greeting = pleasantries[_r(pleasantries.length-1)], extraMsg = stranger.isAlive()?'':".. I never met a dead person before.";
 				if(!!greeting) greeting = ", " + greeting.toLowerCase();
-				friendsList.push( stranger.name ); 
-				friendsID[ stranger.name ] = stranger; 
+				friendsList.push( stranger.name );
+				friendsID[ stranger.name ] = stranger;
 				alert("["+this.name+"]: Hi " + stranger.getName(1) + greeting + extraMsg);
 				firstTimeMeetings[ stranger.name ] = new Date();
-				stranger.meet(this); 
-			} 
+				stranger.meet(this);
+			}
 		}
-		return this; 
+		return this;
 	}
 	this.chillWith = function( people, location ){
 		console.log(people);
@@ -449,9 +450,9 @@ function Person( name, gender, age, weight, birthLocation, birthDate, color ){
 				person.chillWith( subpeople );
 			}
 		}
-	} 
-	this.finalWords = function(){ 
-		var rand = _r(5), 
+	}
+	this.finalWords = function(){
+		var rand = _r(5),
 			friends = friendsList.slice(0),
 			lastFriend = (friends.length>1?friends.splice(-1):''),
 			msg = "Farewell "+friends.join(", ")+(lastFriend?" and "+lastFriend:"")+". I will see you in the other world...";
@@ -475,18 +476,18 @@ function Person( name, gender, age, weight, birthLocation, birthDate, color ){
 		if( person.constructor == Person && friendsID[ person.name ] && firstTimeMeetings[ person.name ] ) return firstTimeMeetings[ person.name ];
 		return null;
 	}
-	this.passAway = function(){ 
-		if(isAlive){ 
-			alert(this.name + " has passed away"); 
-			isAlive = false; 
-			deathday = new Date(); 
-			this.finalWords(); 
-			this.body.style.backgroundColor = "gray"; 
+	this.passAway = function(){
+		if(isAlive){
+			alert(this.name + " has passed away");
+			isAlive = false;
+			deathday = new Date();
+			this.finalWords();
+			this.body.style.backgroundColor = "gray";
 			this.body.style.opacity = 0.5;
 			System.Time.removeEvent( birthday.getMonth(), this.getName(), this, 'birthday' );
 			this.haveFuneral();
-		} 
-		return this; 
+		}
+		return this;
 	};
 	this.haveFuneral = function(){
 		if(!isAlive){
@@ -500,7 +501,7 @@ function Person( name, gender, age, weight, birthLocation, birthDate, color ){
 		return this;
 	}
 	this.daysUntilBirthday = function(){ var currBDay = this.birthDay(), currDay = new Date(); return Math.round((currDay - currBDay)/(24*60*60*1000)); };
-	
+
 	this.hasSpouse = function(){ return !!this.spouse; }
 	this.getMarriedTo = function( person ){
 		if( person.constructor == Person && !this.hasSpouse() ){
@@ -516,12 +517,12 @@ function Person( name, gender, age, weight, birthLocation, birthDate, color ){
 					self.spouse.spouse = null;
 					self.spouse = null;
 				}, 10000
-			);			
+			);
 			alert('What a shame... if only they could work it out...');
 		} else alert(this.getName() + ' is not married!');
 		return this;
 	}
-	
+
 	if( gender == "F" ){
 		this.makeChildWith = function( father, childData ){
 			if( this.gender == "F" && !isPregnant && !(_r(77)%33==0) ){
@@ -534,15 +535,15 @@ function Person( name, gender, age, weight, birthLocation, birthDate, color ){
 						father: father
 					}
 					childData.name = _rv( System.firstNames(childData.gender !== "M") ) + ' ' + father.lastName();
-				} 
-				
+				}
+
 				isPregnant = true;
 				pregnancyData = childData;
 				pregnancyStage = 0;
-				
-				if(this.hasSpouse() && this.spouse != father) alert('Extramarital Affairs...');				
+
+				if(this.hasSpouse() && this.spouse != father) alert('Extramarital Affairs...');
 				alert(this.getName() + ' got pregnant!');
-				
+
 			} else {
 				if(isPregnant) alert(this.getName() + ' is already pregnant! Please wait at least '+(9-pregnancyStage)+' months to have more babies.');
 				else alert('Failed making children. Please try again.');
@@ -551,33 +552,33 @@ function Person( name, gender, age, weight, birthLocation, birthDate, color ){
 		}
 		this.isPregnant = function(){ return isPregnant; }
 		this.pregnancyStage = function(){ return pregnancyStage; }
-		this.pregnancyNextStage = function(){ 
+		this.pregnancyNextStage = function(){
 			if(isPregnant){
 				pregnancyStage++;
-				var dueMonth = 8 + _r(2); 
+				var dueMonth = 8 + _r(2);
 				if( pregnancyStage === dueMonth ) {
 					var child = world.addPerson( pregnancyData );
 					child.mother = this;
 					child.father = pregnancyData.father;
 					pregnancyData.father.addChild( child );
 					/* mother */ children.push( child );
-										
+
 					isPregnant = false;
 					pregnancyData = null;
 					pregnancyStage = -1;
-					
+
 					alert( child.getName() + ' was born to ' + child.mother.getName() + ' and ' + child.father.getName() + '.' );
 				}
-				else if( pregnancyStage > dueMonth ){ 
+				else if( pregnancyStage > dueMonth ){
 					isPregnant = false;
 					pregnancyData = null;
-					pregnancyStage = -1; 
-					alert('There was a complication in '+this.getName()+'\'s pregnancy and it failed...'); 
+					pregnancyStage = -1;
+					alert('There was a complication in '+this.getName()+'\'s pregnancy and it failed...');
 				}
 			}
-			return pregnancyStage; 
+			return pregnancyStage;
 		}
-		
+
 	}
 	this.addChild = function( person ){
 		if( person.constructor == Person ) children.push( person );
@@ -590,17 +591,23 @@ function Person( name, gender, age, weight, birthLocation, birthDate, color ){
 	}
 	this.getChildren = function(){ return children; }
 	this.hasChildren = function(){ return !!children.length; }
-	this.siblings = function(){ 
+	this.siblings = function(){
 		var fatherkids = this.father ? this.father.getChildren() : [],
 			motherkids = this.mother ? this.mother.getChildren() : [];
-		return _.union( fatherkids, motherkids ); 
+		return _.union( fatherkids, motherkids );
 	}
-	
-	this.body = makeHolder(this);	
+
+	this.body = makeHolder(this);
 	systemID = System.generateID( this );
-	
+
 	(function(){
 		Person.prototype.age = Person.prototype.age || 0;
 		Person.prototype.toString = function(){ return [this.getName(),this.isMale()?'M':'F',this.getAge()+"yrs",/*this.weight+"lbs",*/this.isAlive()?'alive':'deceased',this['isPregnant']&&this.isPregnant()?this.pregnancyStage()+' months pregnant':''].join(' / '); }
 	})();
+}
+
+export default {
+	World,
+	Location,
+	Person,
 }
