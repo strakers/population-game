@@ -31,7 +31,8 @@ window.onload = function(){
 	 rob = world.addPerson("Rob Ford","M",51);
 	 group = [ john, loli, paul, sue, lisa ];
 
-	 world.divideAndConquer( countries );
+	world.divideAndConquer(countries);
+	window.world = world;
 
 	 /*
 	 ontario = world.addLocation('Canada').addLocation('Ontario');
