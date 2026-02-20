@@ -1,0 +1,4 @@
+
+.person { height: 136px; width: 300px; }
+.person.M { background: url('img/people/man.png'); }
+.person.F { background: url('img/people/woman.png'); }
