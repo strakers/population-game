@@ -1,4 +1,51 @@
 
-.person { height: 136px; width: 300px; }
+/* .person { height: 136px; width: 300px; }
 .person.M { background: url('img/people/man.png'); }
-.person.F { background: url('img/people/woman.png'); }
+.person.F { background: url('img/people/woman.png'); } */
+
+.person {
+  height: 75px;
+  width: 34px;
+  display: block;
+  margin: 10px;
+  position: relative;
+  float: left;
+  background-color: #222;
+}
+
+.person.M {
+  background: url('../img/people/man-s.png');
+}
+
+.person.F {
+  background: url('../img/people/woman-s.png');
+}
+
+.person .flag {
+  height: 13px;
+  width: 25px;
+  display: block;
+  position: absolute;
+  top: -7px;
+  right: -10px;
+}
+
+.person .flag.canada {
+  background: url('../img/flags/flag-canada.png');
+}
+
+.person .flag.usa {
+  background: url('../img/flags/flag-usa.png');
+}
+
+#locations {
+  clear: both;
+}
+
+.country {
+  height: 120px;
+  width: 130px;
+  padding: 15px;
+  color: #fff;
+  float: left;
+}
