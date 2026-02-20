@@ -5,7 +5,7 @@
   "description": "This is a version of the population game I created way back in 2013, from an idea I had in 2005. At the time, I had wanted to create a simple and fun project to put into application my knowledge around manipulating global, instance, and inherited data within a single ecosystem.",
   "main": "index.html",
   "scripts": {
-    "dev": "npx http-server",
+    "dev": "npx http-server ./public",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
