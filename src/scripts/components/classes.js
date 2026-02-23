@@ -606,8 +606,8 @@ export function Person( name, gender, age, weight, birthLocation, birthDate, col
 	})();
 }
 
-export default {
-	World,
-	Location,
-	Person,
-}
+// export default {
+// 	DWorld: World,
+// 	Location,
+// 	Person,
+// }
