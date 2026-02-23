@@ -1,5 +1,5 @@
-import { World, Location, Person } from "./components/classes.js";
-import { System, makeHolder, countries } from "./components/globals.js";
+import { World, Location, Person } from "./legacy/classes.js";
+import { System, makeHolder, countries } from "./legacy/globals.js";
 
 //World.prototype = Location.prototype;
 
