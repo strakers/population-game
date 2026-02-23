@@ -6,6 +6,9 @@
   "main": "public/index.html",
   "scripts": {
     "dev": "npx http-server ./public",
+    "vite": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -18,5 +21,12 @@
   "bugs": {
     "url": "https://github.com/strakers/population-game/issues"
   },
-  "homepage": "https://github.com/strakers/population-game#readme"
+  "homepage": "https://github.com/strakers/population-game#readme",
+  "dependencies": {
+    "uuid": "^13.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "vite": "^7.3.1"
+  }
 }
