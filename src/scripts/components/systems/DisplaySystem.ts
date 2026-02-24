@@ -3,7 +3,7 @@ import { DateChangeEvent, type DateRepresentation } from "./dateEvents";
 import Person from "../beings/Person";
 import System from "./System";
 import World from "../World";
-import { months } from "../../support/constants";
+import { months, baseYear } from "../../support/constants";
 import type { Country } from "../places/Location";
 
 export default class DisplaySystem extends System {
@@ -20,6 +20,7 @@ export default class DisplaySystem extends System {
     document.addEventListener('dateChange', (/** @type {DateChangeEvent} */ e) => {
       if (!(e instanceof DateChangeEvent)) return;
       this.displayDate(e.data);
+      console.log(`Date updated to ${months[e.data.month]} ${e.data.day}, ${e.data.year + baseYear}`);
     })
   }
 
@@ -82,9 +83,9 @@ export default class DisplaySystem extends System {
     if (!this.dateContainer) return;
     this.dateContainer.innerHTML = `
       <ul class="date-display">
-        <li class="year date-display-metric"><span class="label">Year:</span> <span class="date-value">${date.year + 2013}</span></li>
-        <li class="month date-display-metric"><span class="label">Month:</span> <span class="date-value">${months[date.month]}</span></li>
-        <li class="day date-display-metric"><span class="label">Day:</span> <span class="date-value">${date.day + 1}</span></li>
+        <li class="year date-display-metric"><span class="label">Year</span> <span class="date-value">${date.year + baseYear}</span></li>
+        <li class="month date-display-metric"><span class="label">Month</span> <span class="date-value">${months[date.month]}</span></li>
+        <li class="day date-display-metric"><span class="label">Day</span> <span class="date-value">${date.day}</span></li>
       </ul>
     `;
   }

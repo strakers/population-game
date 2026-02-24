@@ -87,6 +87,11 @@ export const surnames: string[] = ('Smith|Johnson|Williams|Jones|Brown|Davis|Mil
   '|Terrell|Morin|Gillespie|Fuentes|Tillman|Sanford|Bentley|Peck|Key|Salas|Rollins|Gamble|Dickson|Battle|Santana|Cabrera|Cervantes|Howe|Hinton|Hurley|Spence|Zamora|Yang|Mcneil|Suarez|Case|Petty|Gould|Mcfarland|Sampson|Carver|Bray|Rosario|Macdonald|Stout|Hester|Melendez|Dillon|Farley|Hopper|Galloway|Potts|Bernard|Joyner|Stein|Aguirre|Osborn|Mercer|Bender|Franco|Rowland|Sykes|Benjamin|Travis|Pickett|Crane|Sears|Mayo|Dunlap|Hayden|Wilder|Mckay|Coffey|Mccarty|Ewing|Cooley|Vaughan|Bonner|Cotton|Holder|Stark|Ferrell|Cantrell|Fulton|Lynn|Lott|Calderon|Rosa|Pollard|Hooper|Burch|Mullen|Fry|Riddle|Levy|David|Duke|Odonnell|Guy|Michael|Britt|Frederick|Daugherty|Berger|Dillard|Alston|Jarvis|Frye|Riggs|Chaney|Odom|Duffy|Fitzpatrick|Valenzuela|Merrill|Mayer|Alford|Mcpherson|Acevedo|Donovan|Barrera|Albert|Cote|Reilly|Compton|Raymond|Mooney|Mcgowan|Craft|Cleveland|Clemons|Wynn|Nielsen|Baird|Stanton|Snider|Rosales|Bright|Witt|Stuart|Hays|Holden|Rutledge|Kinney|Clements|Castaneda|Slater|Hahn|Emerson|Conrad|Burks|Delaney|Pate|Lancaster|Sweet|Justice|Tyson|Sharpe|Whitfield|Talley|Macias|Irwin|Burris|Ratliff|Mccray|Madden|Kaufman|Beach|Goff|Cash|Bolton|Mcfadden|Levine|Good|Byers|Kirkland|Kidd|Workman|Carney|Dale|Mcleod|Holcomb|England|Finch|Head|Burt|Hendrix|Sosa|Haney|Franks|Sargent|Nieves|Downs|Rasmussen|Bird|Hewitt|Lindsay|Le|Foreman|Valencia|Oneil|Delacruz|Vinson|Dejesus|Hyde|Forbes|Gilliam|Guthrie|Wooten' +
   '|Huber|Barlow|Boyle|Mcmahon|Buckner|Rocha|Puckett|Langley|Knowles|Cooke|Velazquez|Whitley|Noel|Vang').split('|');
 export const months: string[] = 'Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec'.split('|');
+export const lydianSequence = Array.from({ length: 7 }, (_, i) => {
+  const n = i + 1; // Convert 0-indexing to 1-indexing
+  return (2 * n) - 1 - Math.floor(n / 5);
+});
+export const baseYear = 2013;
 
 export default {
   countries,
@@ -94,4 +99,6 @@ export default {
   girlNames,
   surnames,
   months,
+  lydianSequence,
+  baseYear,
 };

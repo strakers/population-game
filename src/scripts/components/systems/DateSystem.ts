@@ -1,5 +1,6 @@
 import System from "./System";
 import World from "../World";
+import { lydianSequence, baseYear } from "../../support/constants";
 import {
   DateChangeEvent,
   DayIncrementEvent,
@@ -113,12 +114,18 @@ export default class DateSystem extends System {
       this.#incrementWeek();
     }
 
+    // Determine the number of days in the current month
+    let daysInMonth = lydianSequence.includes(this.#month + 1) ? 31 : 30; // Adjust for 31-day months
+    if (this.#month === 1) { // February
+      daysInMonth = (baseYear + this.#year) % 4 === 0 ? 29 : 28; // Adjust for leap years
+    }
+
     // trigger new month and reset day counter
-    if (this.#day >= (30 - 1)) {
+    if (this.#day >= (daysInMonth)) {
       this.#day = 0;
       this.#incrementMonth();
     }
-  }
+  } // 1,3,5,7,8,10,12
 
   /**
    * Move the date system forward by one month.
