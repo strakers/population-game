@@ -1,5 +1,5 @@
-import World, { NewWorld } from './components/World';
-import Person from './components/Person';
+import World from './components/World';
+import Person from './components/beings/Person';
 
 ; (function () {
 
@@ -19,7 +19,7 @@ import Person from './components/Person';
   // document.body.appendChild(timeHolder);
   // timeHolder.style.clear = 'both';
 
-  const world = new NewWorld();
+  const world = new World();
   const
     john = world.addPerson({name: "John Smith", sex: "M", age: 29}),
     sue = world.addPerson({name: "Susan Robinson", sex: "F", age: 26}),
@@ -30,7 +30,7 @@ import Person from './components/Person';
     rob = world.addPerson({name: "Rob Ford",sex: "M", age: 51}),
     personGroup = [john, loli, paul, sue, lisa, jack, rob];
 
-  personGroup.forEach(person => world.display.displayPerson(person));
+  // personGroup.forEach(person => world.display.displayPerson(person));
 
   //sue.addNickname( "Sue" );
   //john.meet(sue);

@@ -42,6 +42,7 @@ export default class World {
     // Create person if a string was passed.
     if (!(person instanceof Person)) {
       person = new Person(person);
+      person.triggerChangeEvent('Person created');
     }
 
     // Check if the person is already registered in the world.
