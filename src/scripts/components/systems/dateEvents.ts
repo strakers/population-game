@@ -8,7 +8,7 @@ class DateEvent extends Event {
     this.#data = data;
   }
 
-  getData(): DateRepresentation {
+  get data(): DateRepresentation {
     return this.#data || { year: 0, month: 0, week: 0, day: 0 };
   }
 }
