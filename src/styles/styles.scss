@@ -1,0 +1,55 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #333;
+  min-height: 3rem;
+  margin: 1rem auto;
+}
+
+.is-person {
+  height: 75px;
+  width: 34px;
+  margin: 10px;
+  position: relative;
+  background-color: #222;
+
+  &.sex-m {
+    background: url('../../img/people/man-s.png');
+  }
+
+  &.sex-f {
+    background: url('../../img/people/woman-s.png');
+  }
+}
+
+.is-location {
+  height: 120px;
+  width: 130px;
+  padding: 15px;
+  color: #fff;
+  margin: 10px;
+  background-color: #222;
+
+  &.type-country {
+    position: relative;
+
+    &#can {
+      background-color: #c00;
+    }
+
+    &#usa {
+      background-color: #00c;
+    }
+
+    &::after {
+      content: attr(data-name);
+      position: absolute;
+      bottom: 5px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.8rem;
+    }
+  }
+}
