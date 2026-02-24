@@ -19,7 +19,7 @@ export default class Location extends Named {
     this.#parentLocation = parentLocation;
     this.#displayElement = document.createElement('div');
     this.#displayElement.setAttribute('id', this.abbreviation);
-    this.#displayElement.classList.add(...['location', `type-${this.constructor.name.toLowerCase()}`]);
+    this.#displayElement.classList.add(...['is-location', `type-${this.constructor.name.toLowerCase()}`]);
     this.#displayElement.setAttribute('data-name', this.name);
   }
 

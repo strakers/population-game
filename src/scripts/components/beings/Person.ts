@@ -243,6 +243,7 @@ export default class Person extends Being {
     div.setAttribute('id', this.#systemId || Math.random().toString(36).substring(2, 9));
     div.classList.add(...this.getDisplayClasses());
     div.setAttribute('data-name', `${this.name}`);
+    div.style.backgroundColor = this.colorHex;
 
     return div;
   }
@@ -253,6 +254,7 @@ export default class Person extends Being {
   getDisplayClasses(): string[] {
     const classes = ['is-person'];
     classes.push(this.isAlive ? 'is-alive' : 'is-dead');
+    classes.push(`sex-${this.#sex.toLowerCase()}`);
     if (this.isPregnant) classes.push('is-pregnant');
     if (this.hasChildren) classes.push('has-children');
     if (this.isResident) classes.push('is-resident', `from-${this.#immigration.currentLocation?.abbreviation || 'unknown'}`);
