@@ -1,7 +1,8 @@
-import World from "./World";
+import {OldWorld} from "./World";
 import Person from "./Person";
 import { addEntity, generateCountryCode, drawLocation } from "../support/utility";
 
+/** @deprecated */
 export default class Location {
   name;
   parent;

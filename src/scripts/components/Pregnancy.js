@@ -1,6 +1,7 @@
 import { randomize, generateFirstName } from "../support/utility";
 import Person from "./Person";
 
+/** @deprecated */
 export default class Pregnancy {
   months = 0;
   duedate = 0;

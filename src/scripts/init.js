@@ -1,4 +1,4 @@
-import World from './components/World';
+import World, { NewWorld } from './components/World';
 import Person from './components/Person';
 
 ; (function () {
@@ -6,20 +6,20 @@ import Person from './components/Person';
   document.body.innerHTML = "";
   document.body.innerHTML = "<ul><li>Drag a man onto a woman to make a new person.</li><li>Drag a person onto a country to make them a resident.</li></ul><hr />";
 
-  const personHolder = document.createElement("div");
-  personHolder.setAttribute('id','people');
-  document.body.appendChild(personHolder);
+  // const personHolder = document.createElement("div");
+  // personHolder.setAttribute('id','people');
+  // document.body.appendChild(personHolder);
 
-  const locHolder = document.createElement("div");
-  locHolder.setAttribute('id','locations');
-  document.body.appendChild(locHolder);
+  // const locHolder = document.createElement("div");
+  // locHolder.setAttribute('id','locations');
+  // document.body.appendChild(locHolder);
 
-  const timeHolder = document.createElement("div");
-  timeHolder.setAttribute('id','time');
-  document.body.appendChild(timeHolder);
-  timeHolder.style.clear = 'both';
+  // const timeHolder = document.createElement("div");
+  // timeHolder.setAttribute('id','time');
+  // document.body.appendChild(timeHolder);
+  // timeHolder.style.clear = 'both';
 
-  const world = new World();
+  const world = new NewWorld();
   const
     john = world.addPerson({name: "John Smith", sex: "M", age: 29}),
     sue = world.addPerson({name: "Susan Robinson", sex: "F", age: 26}),
@@ -29,6 +29,8 @@ import Person from './components/Person';
     jack = world.addPerson({name: "Jack Robinson",sex: "M", age: 39}),
     rob = world.addPerson({name: "Rob Ford",sex: "M", age: 51}),
     personGroup = [john, loli, paul, sue, lisa, jack, rob];
+
+  personGroup.forEach(person => world.display.displayPerson(person));
 
   //sue.addNickname( "Sue" );
   //john.meet(sue);

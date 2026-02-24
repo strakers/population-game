@@ -1,5 +1,9 @@
+import {OldWorld} from "./World";
+import Canvas from "./Canvas";
 import { months } from "../support/constants";
 
+/**
+ * @deprecated */
 export default class Time {
   interval;
   timer;
@@ -23,10 +27,28 @@ export default class Time {
     this.system = system;
     this.display = document.querySelector('#time');
 
+    console.log('system', system)
+
     this.month = 0;
     this.displayTime();
 
     this.startTimer(1000);
+  }
+
+  /**
+   * Returns a reference to the containing system
+   * @returns {System}
+   */
+  getSystem() {
+    return this.system;
+  }
+
+  getDate() {
+    return {
+      year: this.year,
+      month: this.month,
+      day: this.day,
+    }
   }
 
   incrementDay() {
@@ -41,11 +63,7 @@ export default class Time {
     document.dispatchEvent(new CustomEvent('dayIncrement', {
       detail: {
         message: "A day has passed",
-        date: {
-          day: this.day,
-          month: this.month,
-          year: this.year,
-        }
+        date: this.getDate(),
       }
     }));
 
@@ -53,7 +71,6 @@ export default class Time {
   }
 
   incrementMonth() {
-    console.log('increment month', this.month);
     this.month++;
 
     // increment Year
@@ -62,7 +79,7 @@ export default class Time {
       this.incrementYear();
     }
 
-    window.world.getPersons().forEach(person => {
+    this.system.getWorld().getPersons().forEach(person => {
       // advance progess of pregnancies
       if (person.isPregnant()) {
         person.pregnancy.advance();
@@ -73,11 +90,7 @@ export default class Time {
     document.dispatchEvent(new CustomEvent('monthIncrement', {
       detail: {
         message: "A month has passed",
-        date: {
-          day: this.day,
-          month: this.month,
-          year: this.year,
-        }
+        date: this.getDate(),
       }
     }));
   }
@@ -89,11 +102,7 @@ export default class Time {
     document.dispatchEvent(new CustomEvent('yearIncrement', {
       detail: {
         message: "A year has passed",
-        date: {
-          day: this.day,
-          month: this.month,
-          year: this.year,
-        }
+        date: this.getDate(),
       }
     }));
   }
@@ -128,17 +137,10 @@ export default class Time {
 	getYear(){ return year; }
   getDate() { return new Date(this.year + 2013, this.month, this.day); }
   displayTime() {
-    if (!!this.display) {
-      this.display.innerHTML = `
-        <ul class="date-display">
-          <li class="year date-display-metric"><span class="label">Year:</span> <span class="date-value">${this.year + 2013}</span></li>
-          <li class="month date-display-metric"><span class="label">Month:</span> <span class="date-value">${months[this.month]}</span></li>
-          <li class="day date-display-metric"><span class="label">Day:</span> <span class="date-value">${this.day + 1}</span></li>
-        </ul>
-      `;
-    }
-    else {
-      console.warn('There is no element set to display the date');
-    }
+    /** @type {World} */
+    const world = this.system.getWorld(),
+      canvas = world.getCanvas();
+
+    canvas.updateDate(this.getDate());
   }
 }

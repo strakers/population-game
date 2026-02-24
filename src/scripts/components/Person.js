@@ -6,6 +6,7 @@ import System from "./System";
 /**
  * Create a new Person
  * @class
+ * @deprecated
  */
 export default class Person {
   /** @type {string} */
