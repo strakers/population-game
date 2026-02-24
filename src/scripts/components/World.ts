@@ -12,7 +12,7 @@ export default class World {
   #display = new DisplaySystem(this);
   #database = new RegistrationSystem(this);
 
-  // managers
+  // data stores
   #persons = new Map;
   #locations = new Map;
 
@@ -53,7 +53,7 @@ export default class World {
     // Register the person in the world and add them to the display.
     this.#persons.set(person.name, person);
     console.log(`Person type of name ${person.name} has been created.`);
-    this.#display.displayPerson(person);
+    this.display.displayPerson(person);
     return person;
   }
 
@@ -75,7 +75,7 @@ export default class World {
     // Register the location in the world and add it to the display.
     this.#locations.set(location.name, location);
     console.log(`Country type of name ${location.name} has been created.`);
-    this.#display.displayLocation(location);
+    this.display.displayLocation(location);
     return location;
   }
 
@@ -91,15 +91,15 @@ export default class World {
    * Retrieves the world's current date.
    */
   getCurrentDate(): DateRepresentation {
-    return this.#time.getDate();
+    return this.clock.getDate();
   }
 
   /**
    * Starts the world's time progression. Returns false if the timer was already running, and true if it was successfully started.
    */
   start(): boolean {
-    if (this.#time.isRunning()) return false;
-    this.#time.startTime();
+    if (this.clock.isRunning) return false;
+    this.clock.startTime();
     return true;
   }
 
@@ -107,8 +107,8 @@ export default class World {
    * Stops the world's time progression. Returns false if the timer was already stopped, and true if it was successfully stopped.
    */
   stop(): boolean {
-    if (!this.#time.isRunning()) return false;
-    this.#time.stopTime();
+    if (!this.clock.isRunning) return false;
+    this.clock.stopTime();
     return true;
   }
 
@@ -116,6 +116,6 @@ export default class World {
    * Sets the world's time progression speed. The interval is in seconds, and will be converted to milliseconds for the timer.
    */
   setSpeed(interval = 1): void {
-    this.#time.changeSpeed(interval * 1000);
+    this.clock.changeSpeed(interval * 1000);
   }
 }
