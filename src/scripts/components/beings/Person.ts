@@ -53,6 +53,9 @@ export default class Person extends Being {
     this.#mother = props.mother || null;
     this.#father = props.father || null;
 
+
+    this.registerDisplayElement();
+
     // Listen for year increments to update age
     document.addEventListener('yearIncrement', () => {
       if (this.isAlive) {
@@ -222,6 +225,26 @@ export default class Person extends Being {
 
   setFather(father: Person) {
     this.#father = father;
+  }
+
+  /**
+   * Registers the person's display element in the UI and starts their life.
+   * Overrides method from the base class.
+   */
+  registerDisplayElement(): HTMLDivElement {
+    super.registerDisplayElement();
+    super.startLife();
+
+    const div = this.getDisplayElement();
+    if (!div) {
+      throw new Error("Failed to register display element for person");
+    }
+
+    div.setAttribute('id', this.#systemId || Math.random().toString(36).substring(2, 9));
+    div.classList.add(...this.getDisplayClasses());
+    div.setAttribute('data-name', `${this.name}`);
+
+    return div;
   }
 
   /**
