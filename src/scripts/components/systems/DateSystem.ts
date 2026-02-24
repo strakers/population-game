@@ -62,7 +62,7 @@ export default class DateSystem extends System {
     this.#interval = interval;
 
     // if timer is currently running, restart with new speed
-    if (this.isRunning()) {
+    if (this.isRunning) {
       this.stopTime();
       this.startTime();
     }
@@ -90,7 +90,7 @@ export default class DateSystem extends System {
   /**
    * Returns whether the date timer is currently running or not.
    */
-  isRunning(): boolean {
+  get isRunning(): boolean {
     return this.#timerIndex !== null;
     // return this.#isRunning;
   }
