@@ -1,4 +1,4 @@
-import type { DateRepresentation } from "../systems/dateEvents";
+import type World from "../World";
 
 export default abstract class Named {
   #name: string = '';
@@ -38,9 +38,6 @@ export default abstract class Named {
 // Extend the Window interface to include 'world'
 declare global {
   interface Window {
-    world: {
-      getCurrentDate: () => DateRepresentation;
-      // add other properties/methods as needed
-    };
+    world: World
   }
 }
