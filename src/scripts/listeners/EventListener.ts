@@ -1,15 +1,15 @@
 
-export default abstract class ActionListener {
+export default abstract class EventListener {
   /**
-   * Defines the type of action that triggers the listener (e.g., 'click', 'mouseover').
-   * This property should be overridden in subclasses to specify the appropriate action type for each listener.
+   * Defines the type of event that triggers the listener (e.g., 'click', 'mouseover').
+   * This property should be overridden in subclasses to specify the appropriate event type for each listener.
    * @type {string}
    * @throws Error if the property is not defined in the subclass.
    */
-  static onAction: string;
+  static eventName: string;
 
   /**
-   * Defines the behavior that occurs when the specified action is triggered on the associated display element.
+   * Defines the behavior that occurs when the specified event is triggered on the associated display element.
    * This method should be overridden in subclasses to implement specific behaviors for different types of listeners.
    * @param event The event object from the triggered event.
    * @throws Error if the method is not implemented in the subclass.
@@ -23,26 +23,26 @@ export default abstract class ActionListener {
   /**
    * Applies the listener to a displayable entity's display element, binding the effect method to the entity's context.
    * @param entity
-   * @param onActionOverride
+   * @param eventNameOverride
    * @returns
    */
-  static apply(entity: DisplayableEntity, onActionOverride: string|null = null): void {
+  static apply(entity: DisplayableEntity, eventNameOverride: string|null = null): void {
     const element = entity.getDisplayElement();
     if (!element) {
       console.warn(`Entity does not have a display element registered.`);
       return;
     }
-    element.addEventListener(onActionOverride || this.onAction, this.effect.bind(entity));
+    element.addEventListener(eventNameOverride || this.eventName, this.effect.bind(entity));
   }
 
   /**
    * Applies the listener to a specific HTML element, binding the effect method to the given context.
    * @param element
-   * @param onActionOverride
+   * @param eventNameOverride
    * @param context
    */
-  static applyToElement(element: HTMLElement, onActionOverride: string|null = null, context: DisplayableEntity): void {
-    element.addEventListener(onActionOverride || this.onAction, this.effect.bind(context));
+  static applyToElement(element: HTMLElement, eventNameOverride: string|null = null, context: DisplayableEntity): void {
+    element.addEventListener(eventNameOverride || this.eventName, this.effect.bind(context));
   }
 }
 
