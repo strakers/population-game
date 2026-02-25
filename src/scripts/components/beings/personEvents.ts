@@ -2,7 +2,7 @@ import Person from './Person';
 
 class PersonEvent extends Event {
   #person: Person|null = null;
-  #message: string = '';
+  #message: string = '';;
 
   setPerson(person: Person) {
     this.#person = person;
@@ -19,6 +19,10 @@ class PersonEvent extends Event {
 
   get message(): string {
     return this.#message;
+  }
+
+  get target(): HTMLElement | null {
+    return this.person.getDisplayElement();
   }
 }
 
