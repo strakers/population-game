@@ -11,6 +11,9 @@ import PersonDragStartHandler from "../../events/handlers/PersonDragStartHandler
 import PersonStatusChangeHandler from "../../events/handlers/PersonStatusChangeHandler";
 import PersonDragOverHandler from "../../events/handlers/PersonDragOverHandler";
 import PersonDropHandler from "../../events/handlers/PersonDropHandler";
+import LocationDragOverHandler from "../../events/handlers/LocationDragOverHandler";
+import LocationClickHandler from "../../events/handlers/LocationClickHandler";
+import LocationDropHandler from "../../events/handlers/LocationDropHandler";
 
 export default class DisplaySystem extends System {
   #containers = new Map<string, HTMLDivElement>();
@@ -104,10 +107,13 @@ export default class DisplaySystem extends System {
     // Adds location to the display.
     this.locationContainer?.appendChild(locationDisplay);
 
-    // Displays the location's population count onclick.
-    locationDisplay.addEventListener('click', (e) => {
-      console.log(`The population of ${location.name} is currently ${location.population}.`);
-    });
+    // Apply event handlers for location.
+    const handlers: (typeof EventHandler)[] = [
+      LocationClickHandler,
+      LocationDragOverHandler,
+      LocationDropHandler,
+    ];
+    handlers.forEach(handler => handler.applyTo(location));
   }
 
   /**
