@@ -1,0 +1,111 @@
+.instructions {
+  padding: 0;
+  margin: 1rem auto;
+  max-width: max-content;
+  font-family: sans-serif;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  // border: 1px solid #333;
+  min-height: 3rem;
+  margin: 1rem auto;
+}
+
+.is-person {
+  height: 75px;
+  width: 34px;
+  margin: 10px;
+  position: relative;
+  background-color: #222;
+
+  &.sex-m {
+    background: url('../../img/people/man-s.png');
+  }
+
+  &.sex-f {
+    background: url('../../img/people/woman-s.png');
+  }
+
+  &.is-resident {
+
+    &::after {
+      content: "";
+      height: 13px;
+      width: 25px;
+      display: block;
+      position: absolute;
+      top: -7px;
+      right: -10px;
+    }
+
+    &.from-can::after {
+      background: url('../../img/flags/flag-canada.png');
+    }
+
+    &.from-usa::after {
+      background: url('../../img/flags/flag-usa.png');
+    }
+  }
+}
+
+.is-location {
+  height: 120px;
+  width: 130px;
+  padding: 15px;
+  color: #fff;
+  margin: 10px;
+  background-color: #222;
+
+  &.type-country {
+    position: relative;
+    border-radius: 4px;
+
+    &#can {
+      background-color: #c00;
+    }
+
+    &#usa {
+      background-color: #00c;
+    }
+
+    &::after {
+      content: attr(data-name);
+      position: absolute;
+      bottom: 5px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.8rem;
+    }
+  }
+}
+
+.date-display {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 1.2rem;
+  margin: 1rem auto;
+  list-style: none;
+  display: grid;
+  gap: .25rem;
+  grid-template-columns: repeat(3, minmax(100px, 1fr));
+  padding: 0;
+
+  & > li {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    gap: .25rem;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5rem;
+
+    .label {
+      font-size: 0.7rem;
+      color: #666;
+      font-weight: bold;
+    }
+  }
+}

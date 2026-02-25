@@ -14,11 +14,11 @@
 }
 
 .person.M {
-  background: url('../img/people/man-s.png');
+  background: url('../../img/people/man-s.png');
 }
 
 .person.F {
-  background: url('../img/people/woman-s.png');
+  background: url('../../img/people/woman-s.png');
 }
 
 .person .flag {
@@ -30,12 +30,12 @@
   right: -10px;
 }
 
-.person .flag.canada {
-  background: url('../img/flags/flag-canada.png');
+.person .flag.canada, .person .flag.can {
+  background: url('../../img/flags/flag-canada.png');
 }
 
 .person .flag.usa {
-  background: url('../img/flags/flag-usa.png');
+  background: url('../../img/flags/flag-usa.png');
 }
 
 #locations {
