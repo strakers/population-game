@@ -1,5 +1,5 @@
 import EventHandler from "./EventHandler";
-import Person from "../components/beings/Person";
+import Person from "../../components/beings/Person";
 
 export default class PersonClickHandler extends EventHandler {
   static eventName = 'click';
