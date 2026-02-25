@@ -53,6 +53,7 @@ export default class World {
     // Register the person in the world and add them to the display.
     this.#persons.set(person.name, person);
     console.log(`Person type of name ${person.name} has been created.`);
+    this.database.register(person);
     this.display.displayPerson(person);
     return person;
   }

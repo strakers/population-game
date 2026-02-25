@@ -5,6 +5,12 @@ import System from "./System";
 import World from "../World";
 import { months, baseYear } from "../../support/constants";
 import type { Country } from "../places/Location";
+import type EventHandler from "../../events/handlers/EventHandler";
+import PersonClickHandler from "../../events/handlers/PersonClickHandler";
+import PersonDragStartHandler from "../../events/handlers/PersonDragStartHandler";
+import PersonStatusChangeHandler from "../../events/handlers/PersonStatusChangeHandler";
+import PersonDragOverHandler from "../../events/handlers/PersonDragOverHandler";
+import PersonDropHandler from "../../events/handlers/PersonDropHandler";
 
 export default class DisplaySystem extends System {
   #containers = new Map<string, HTMLDivElement>();
@@ -55,13 +61,34 @@ export default class DisplaySystem extends System {
       return;
     }
 
+    // Adds person to the display.
     this.personContainer?.appendChild(personDisplay);
-    personDisplay.addEventListener('personStatusChange', (e) => {
-      if (!(e instanceof PersonStatusChangeEvent)) return;
-      // Handle person status change events to update the display accordingly.
-      const classes = e.person.getDisplayClasses(); // Assuming the event includes details about the status change.
-      personDisplay.className = classes.join(' ');
-    });
+    personDisplay.setAttribute('draggable', 'true');
+
+    // Adds click listener to the person's display element to log their current status.
+    const handlers: (typeof EventHandler)[] = [
+      PersonStatusChangeHandler,
+      PersonClickHandler,
+      PersonDragStartHandler,
+      PersonDragOverHandler,
+      // PersonDragEndHandler,
+      PersonDropHandler,
+    ];
+    handlers.forEach(handler => handler.applyTo(person));
+
+    // // Adds drag and drop functionality to the person's display element for moving between locations.
+    // personDisplay.addEventListener('dragend', (e) => {
+    //   // Handle any cleanup after dragging if necessary.
+    //   console.log(`Finished dragging ${person.name}`,e);
+    // });
+    // personDisplay.addEventListener('drop', (e) => {
+    //   e.preventDefault();
+    //   const name = e.dataTransfer?.getData('text/plain');
+    //   const type = e.dataTransfer?.getData('type');
+    //   if (type === 'person') {
+    //     console.log(`Dropped person ${name}`);
+    //   }
+    // });
   }
 
   /**
@@ -73,7 +100,14 @@ export default class DisplaySystem extends System {
       console.warn(`Location ${location.name} does not have a display element registered.`);
       return;
     }
+
+    // Adds location to the display.
     this.locationContainer?.appendChild(locationDisplay);
+
+    // Displays the location's population count onclick.
+    locationDisplay.addEventListener('click', (e) => {
+      console.log(`The population of ${location.name} is currently ${location.population}.`);
+    });
   }
 
   /**
