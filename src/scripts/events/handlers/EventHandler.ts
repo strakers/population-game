@@ -26,7 +26,7 @@ export default abstract class EventHandler {
    * @param eventNameOverride
    * @returns
    */
-  static apply(entity: DisplayableEntity, eventNameOverride: string|null = null): void {
+  static applyTo(entity: DisplayableEntity, eventNameOverride: string|null = null): void {
     const element = entity.getDisplayElement();
     if (!element) {
       console.warn(`Entity does not have a display element registered.`);
