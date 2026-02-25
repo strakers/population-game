@@ -1,8 +1,8 @@
 
-export default abstract class EventListener {
+export default abstract class EventHandler {
   /**
-   * Defines the type of event that triggers the listener (e.g., 'click', 'mouseover').
-   * This property should be overridden in subclasses to specify the appropriate event type for each listener.
+   * Defines the type of event that triggers the handler (e.g., 'click', 'mouseover').
+   * This property should be overridden in subclasses to specify the appropriate event type for each handler.
    * @type {string}
    * @throws Error if the property is not defined in the subclass.
    */
@@ -10,18 +10,18 @@ export default abstract class EventListener {
 
   /**
    * Defines the behavior that occurs when the specified event is triggered on the associated display element.
-   * This method should be overridden in subclasses to implement specific behaviors for different types of listeners.
+   * This method should be overridden in subclasses to implement specific behaviors for different types of handlers.
    * @param event The event object from the triggered event.
    * @throws Error if the method is not implemented in the subclass.
    * @returns void
    */
   static effect(event: Event): void {
     console.warn('Unhandled event triggered for', this, event);
-    throw new Error("Effect method not implemented for this listener.");
+    throw new Error("Effect method not implemented for this handler.");
   };
 
   /**
-   * Applies the listener to a displayable entity's display element, binding the effect method to the entity's context.
+   * Applies the handler to a displayable entity's display element, binding the effect method to the entity's context.
    * @param entity
    * @param eventNameOverride
    * @returns

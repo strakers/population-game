@@ -1,7 +1,7 @@
-import EventListener from "./EventListener";
+import EventHandler from "./EventHandler";
 import Person from "../components/beings/Person";
 
-export default class PersonClickListener extends EventListener {
+export default class PersonClickHandler extends EventHandler {
   static eventName = 'click';
 
   static effect(e: Event): void {
