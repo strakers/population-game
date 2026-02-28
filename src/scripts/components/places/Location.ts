@@ -1,4 +1,5 @@
 import Named from "../primitives/Named";
+import { wordsBlacklistedFromCountryNames } from "../../support/constants";
 import Person from "../beings/Person";
 import World from "../World";
 
@@ -95,6 +96,18 @@ export default class Location extends Named {
       .slice(0, limit)
       .join('')
       .toUpperCase();
+  }
+
+  static abbreviate(name: string, overrideFn: ((a: string,b: string[],c: string) => string) | null): string {
+    let filteredNameParts = name.toLowerCase().split(' ').filter((w) => !wordsBlacklistedFromCountryNames.includes(w));
+    let key = filteredNameParts.join(' ');
+    if (key.includes(' ')) {
+      key = filteredNameParts.map((n) => n.substring(0, 1)).join('');
+    }
+    if (overrideFn) {
+      key = overrideFn(name, filteredNameParts, key);
+    }
+    return key;
   }
 }
 
