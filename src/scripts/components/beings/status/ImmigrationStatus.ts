@@ -1,13 +1,30 @@
 import { Country } from '../../places/Location';
+import type Person from '../Person';
 
 export default class ImmigrationStatus {
   #locations: Country[] = [];
-  #origin: Country|null = null;
+  #origin: Country | null = null;
+  #person: Person | null = null;
+
+  constructor(person: Person) {
+    this.#person = person;
+  }
+
   /**
    * Adds a location to the being's history of locations.
    */
   addLocation(location: Country) {
     this.#locations.push(location);
+
+    if (this.#person) {
+      // Update previous location's list for population counts.
+      if (this.previousLocation) {
+        this.previousLocation.unregisterPerson(this.#person);
+      }
+
+      // Update current location's list for population counts.
+      location.registerPerson(this.#person);
+    }
 
     // If this is the first location added, it is also set as the person's place of origin.
     if (!this.#origin) {

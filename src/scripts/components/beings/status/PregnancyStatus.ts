@@ -1,11 +1,14 @@
 import { randomize, generateFirstName } from "../../../support/utility";
 import { type DateRepresentation } from "../../systems/dateEvents";
+import { minMonthsOfPregnancy } from "../../../support/constants";
 import Person, { type Sex } from "../Person";
 
 export default class PregnancyStatus {
+  #isActive = false;
   #startDate: DateRepresentation | null = null
   #monthsProgressed = 0;
   #estimatedDuration = 0; // in months
+  #incrementListener: () => void;
 
   #sexOfChild: Sex = 'O';
   #carrier: Person|null = null;
@@ -24,10 +27,6 @@ export default class PregnancyStatus {
       throw new Error("Carrier is not able to get pregnant");
     }
 
-    if (!carrier.isPregnant) {
-      throw new Error("Carrier is already pregnant");
-    }
-
     // assign pregnancy roles
     this.#carrier = carrier;
     this.#donor = donor;
@@ -37,7 +36,23 @@ export default class PregnancyStatus {
     this.#startDate = window.world.getCurrentDate();
 
     // Define estimated duration of pregnancy (in months) with some variability
-    this.#estimatedDuration = 8 + randomize(2); // typically around ~9 months
+    this.#estimatedDuration = minMonthsOfPregnancy + randomize(2); // typically around ~9 months
+    this.#isActive = true;
+
+    // Listen for year increments to update age
+    this.#incrementListener = () => {
+      console.log('advance pregancy', this.currentMonth)
+      this.advance();
+    }
+    this.setEventListeners();
+  }
+
+  setEventListeners() {
+    document.addEventListener('monthIncrement', this.#incrementListener);
+  }
+
+  unsetEventListeners() {
+    document.removeEventListener('monthIncrement', this.#incrementListener);
   }
 
   /**
@@ -47,12 +62,16 @@ export default class PregnancyStatus {
   advance() {
     this.#monthsProgressed++;
 
+    if (!this.#isActive) {
+      throw new Error('Pregnancy is no longer active');
+    }
+
     if (!this.#carrier) {
       throw new Error("Carrier is not defined for this pregnancy");
     }
 
     // add a level of unpredictability to birth date (each month)
-    const dueMonth = 8 + randomize(2);
+    const dueMonth = minMonthsOfPregnancy + randomize(2);
 
     if (this.#monthsProgressed >= dueMonth) {
       // create new person and assign to the world
@@ -71,6 +90,8 @@ export default class PregnancyStatus {
       this.#donor?.assignChild(child);
 
       // update carrier's state and body display
+      this.#isActive = false;
+      this.unsetEventListeners();
       this.#carrier.endPregnancy();
 
       console.log(`${this.#carrier.name} has given birth to a ${child.sex === 'M' ? 'boy' : 'girl'}! The child was given the name "${child.firstName}".`)

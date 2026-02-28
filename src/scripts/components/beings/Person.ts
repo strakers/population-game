@@ -19,7 +19,7 @@ export default class Person extends Being {
   #systemId: string | null = null;
 
   // immigration tracker
-  #immigration = new ImmigrationStatus;
+  #immigration = new ImmigrationStatus(this);
 
   // personal dates
   #birthDate: DateRepresentation | null = null;
@@ -53,8 +53,13 @@ export default class Person extends Being {
     this.#mother = props.mother || null;
     this.#father = props.father || null;
 
-
+    // Create a physical representation of the person for display and interactions.
     this.registerDisplayElement();
+
+    // Predetermine person's future fertility.
+    if (this.#sex === 'F') {
+      this.#canGetPregnant = true;
+    }
 
     // Listen for year increments to update age
     document.addEventListener('yearIncrement', () => {
@@ -166,6 +171,13 @@ export default class Person extends Being {
    * @param location
    */
   migrateTo(location: Country) {
+    // If person is already registered to the country, exit gracefully
+    if (this.#immigration.currentLocation === location) {
+      console.warn(`${this.name} is already registered to ${location.name}.`);
+      return;
+    }
+
+    // Register user with the country.
     this.#immigration.addLocation(location);
 
     // Emit event to display a new place of residence for the person
@@ -284,6 +296,7 @@ export default class Person extends Being {
       this.sex,
       this.age + 'yrs',
       this.isAlive ? 'alive' : 'deceased',
+      this.#immigration.currentLocation ? this.#immigration.currentLocation.name : '',
       this.isPregnant ? `${this.#pregnancy?.currentMonth} months pregnant` : '',
       this.hasChildren ? `${this.children.length} ${this.children.length===1?'child':'children'}` : ''
     ]
