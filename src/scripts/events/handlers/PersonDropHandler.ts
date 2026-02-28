@@ -1,6 +1,7 @@
 import EventHandler from "./EventHandler";
 import Person from "../../components/beings/Person";
 import { randomize } from "../../support/utility";
+import { months } from "../../support/constants";
 
 export default class PersonDropHandler extends EventHandler {
   static eventName = 'drop';
@@ -71,5 +72,9 @@ function triggerCoupleInteraction(subject: Person, recipient: Person): void {
   // Pregnancy is possible!
   console.log(`${possibleCarrier.name} has become pregnant!`);
   possibleCarrier.startPregnancy(donor);
+  const dueDate = possibleCarrier.pregnancyStatus?.dueDate;
+  if (dueDate) {
+    console.log(`${possibleCarrier.name} will be due on apprimately ${months[dueDate.month]} ${dueDate.day}, ${dueDate.year+2013}.`);
+  }
 }
 
