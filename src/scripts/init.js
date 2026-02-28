@@ -1,5 +1,5 @@
 import World from './components/World';
-import { simulation1 } from './example';
+import { simulation2 } from './example';
 import '../styles/styles.scss';
 
 ; (function () {
@@ -28,7 +28,7 @@ import '../styles/styles.scss';
   //   usa = world.addLocation("United States of America"),
   //   locationGroup = [canada, usa];
 
-  const sim = simulation1();
+  const sim = simulation2();
   const world = sim.world;
 
   // window.world = sim.world;
