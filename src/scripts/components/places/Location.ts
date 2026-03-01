@@ -1,7 +1,7 @@
 import Named from "../primitives/Named";
-import { wordsBlacklistedFromCountryNames } from "../../support/constants";
 import Person from "../beings/Person";
 import World from "../World";
+import { getFlag, processCountryNameExceptions, wordsBlacklistedFromCountryNames } from "../../support/flags";
 
 /**
  * A location is a place that can contain people and other locations. It can be a country, state, city, etc.
@@ -98,7 +98,7 @@ export default class Location extends Named {
       .toUpperCase();
   }
 
-  static abbreviate(name: string, overrideFn: ((a: string,b: string[],c: string) => string) | null): string {
+  static slugify(name: string, overrideFn: ((a: string,b: string[],c: string) => string) | null = null): string {
     let filteredNameParts = name.toLowerCase().split(' ').filter((w) => !wordsBlacklistedFromCountryNames.includes(w));
     let key = filteredNameParts.join(' ');
     if (key.includes(' ')) {
@@ -123,6 +123,19 @@ export default class Location extends Named {
 
 /** Country is a type of location. */
 export class Country extends Location {
+
+  constructor(name: string, parentLocation: Location | World | null = null) {
+    super(name, parentLocation);
+
+    const flagSrc = getFlag(Location.slugify(this.name, processCountryNameExceptions));
+
+    if (flagSrc) {
+      const flagImg = document.createElement('img');
+      flagImg.setAttribute('src', flagSrc);
+      this.getDisplayElement()?.appendChild(flagImg);
+    }
+  }
+
   get abbreviation(): string {
     if (this.name.includes(' ')) {
       return this.name.match(/\b[A-Z]/g)?.join('').toLowerCase() || '';
@@ -130,6 +143,34 @@ export class Country extends Location {
 
     const match = this.name.match(/^\w{3}/);
     return match ? match[0].toLowerCase() : '';
+  }
+
+  registerPerson(person: Person): Country { // add flag element img
+    super.registerPerson(person);
+
+    const key = Location.slugify(this.name);
+    const div = person.getDisplayElement();
+    if (!div) return this;
+
+    const flagImg = document.createElement('img');
+    flagImg.setAttribute('src', getFlag(key));
+    flagImg.classList.add('flag', `country-${key}`);
+
+    div.appendChild(flagImg);
+    return this;
+  }
+
+  unregisterPerson(person: Person): Location {
+    super.unregisterPerson(person);
+
+    const div = person.getDisplayElement();
+    if (!div) return this;
+
+    const flagImg = div.querySelector('img');
+    if (!flagImg) return this;
+
+    div.removeChild(flagImg);
+    return this;
   }
 }
 
