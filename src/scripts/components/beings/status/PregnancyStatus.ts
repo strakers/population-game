@@ -82,8 +82,15 @@ export default class PregnancyStatus {
         father: this.#donor,
         color: this.#donor ? (this.#donor.color + this.#carrier.color) / 2 : this.#carrier.color,
       });
+
       child.startLife();
       window.world.addPerson(child);
+
+      // update child's location based on mother's current location
+      const mothersLocation = this.#carrier.passport.currentLocation;
+      if (mothersLocation) {
+        child.migrateTo(mothersLocation);
+      }
 
       // assign child to carrier and donor
       this.#carrier.assignChild(child);

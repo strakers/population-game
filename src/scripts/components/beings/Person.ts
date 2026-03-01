@@ -167,6 +167,13 @@ export default class Person extends Being {
   }
 
   /**
+   * Exposes the person's immigration locations
+   */
+  get passport(): ImmigrationStatus {
+    return this.#immigration;
+  }
+
+  /**
    * Migrates the person to a new location, adding it to their immigration history.
    * @param location
    */
