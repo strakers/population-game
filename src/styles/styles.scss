@@ -13,6 +13,11 @@
   // border: 1px solid #333;
   min-height: 3rem;
   margin: 1rem auto;
+
+  &#locations {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+  }
 }
 
 .is-person {
@@ -30,31 +35,53 @@
     background: url('../../img/people/woman-s.png');
   }
 
-  &.is-resident {
+  &:not([class*='resident-of']) {
+    position: relative;
 
-    &::after {
-      content: "";
+    .flag {
+      display: none;
+    }
+  }
+
+  &[class*='resident-of'] {
+
+    .flag {
+      display: block;
       height: 13px;
-      width: 25px;
+      width: min-content;
       display: block;
       position: absolute;
       top: -7px;
       right: -10px;
-    }
-
-    &.from-can::after {
-      background: url('../../img/flags/flag-canada.png');
-    }
-
-    &.from-usa::after {
-      background: url('../../img/flags/flag-usa.png');
+      border: 1px solid #333;
     }
   }
+
+  // &.is-resident {
+
+  //   &::after {
+  //     content: "";
+  //     height: 13px;
+  //     width: 25px;
+  //     display: block;
+  //     position: absolute;
+  //     top: -7px;
+  //     right: -10px;
+  //   }
+
+  //   &.from-can::after {
+  //     background: url('../../img/flags/flag-canada.png');
+  //   }
+
+  //   &.from-usa::after {
+  //     background: url('../../img/flags/flag-usa.png');
+  //   }
+  // }
 }
 
 .is-location {
   height: 120px;
-  width: 130px;
+  width: auto;
   padding: 15px;
   color: #fff;
   margin: 10px;
@@ -63,14 +90,6 @@
   &.type-country {
     position: relative;
     border-radius: 4px;
-
-    &#can {
-      background-color: #c00;
-    }
-
-    &#usa {
-      background-color: #00c;
-    }
 
     &::after {
       content: attr(data-name);
