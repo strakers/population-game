@@ -16,12 +16,19 @@ export default class Location extends Named {
   constructor(name: string, parentLocation: Location|World|null = null) {
     super();
 
+    // create element for location
     this.setName(name);
     this.#parentLocation = parentLocation;
     this.#displayElement = document.createElement('div');
     this.#displayElement.setAttribute('id', this.abbreviation);
     this.#displayElement.classList.add(...['is-location', `type-${this.constructor.name.toLowerCase()}`]);
     this.#displayElement.setAttribute('data-name', this.name);
+
+    // create element for holding the country name
+    const nameEl = document.createElement('span');
+    nameEl.classList.add('location-name');
+    nameEl.textContent = this.name;
+    this.#displayElement.appendChild(nameEl);
   }
 
   getPeople(): Map<string, Person> {
