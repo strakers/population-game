@@ -16,7 +16,7 @@
 
   &#locations {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
   }
 }
 
@@ -56,49 +56,35 @@
       border: 1px solid #333;
     }
   }
-
-  // &.is-resident {
-
-  //   &::after {
-  //     content: "";
-  //     height: 13px;
-  //     width: 25px;
-  //     display: block;
-  //     position: absolute;
-  //     top: -7px;
-  //     right: -10px;
-  //   }
-
-  //   &.from-can::after {
-  //     background: url('../../img/flags/flag-canada.png');
-  //   }
-
-  //   &.from-usa::after {
-  //     background: url('../../img/flags/flag-usa.png');
-  //   }
-  // }
 }
 
 .is-location {
-  height: 120px;
   width: auto;
+  margin: 10px;
   padding: 15px;
   color: #fff;
-  margin: 10px;
+  min-height: 3rem;
   background-color: #222;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-content: space-between;
+  align-items: center;
+  gap: .5rem;
 
   &.type-country {
     position: relative;
     border-radius: 4px;
+    text-transform: uppercase;
+  }
 
-    &::after {
-      content: attr(data-name);
-      position: absolute;
-      bottom: 5px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 0.8rem;
-    }
+  .location-name {
+    font-size: .75rem;
+  }
+
+  img {
+    max-height: 45px;
+    justify-self: end;
   }
 }
 
