@@ -167,6 +167,13 @@ export default class Person extends Being {
   }
 
   /**
+   * Exposes the person's immigration locations
+   */
+  get passport(): ImmigrationStatus {
+    return this.#immigration;
+  }
+
+  /**
    * Migrates the person to a new location, adding it to their immigration history.
    * @param location
    */
@@ -269,7 +276,7 @@ export default class Person extends Being {
     classes.push(`sex-${this.#sex.toLowerCase()}`);
     if (this.isPregnant) classes.push('is-pregnant');
     if (this.hasChildren) classes.push('has-children');
-    if (this.isResident) classes.push('is-resident', `from-${this.#immigration.currentLocation?.abbreviation || 'unknown'}`);
+    if (this.isResident) classes.push('is-resident', `resident-of-${this.#immigration.currentLocation?.abbreviation || 'unknown'}`);
     // age-based classes
     if (this.age < 2) classes.push('is-infant');
     if (this.age >= 2 && this.age < 13) classes.push('is-child');

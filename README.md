@@ -10,4 +10,4 @@ Admittedly, the initial version of the game was extremely simple in nature with 
 
 ## Screenshot
 
-<img src="./public/img/screenshot.png" style="max-width: 300px">
+<img src="./public/img/screenshot3.png" style="max-width: 300px">

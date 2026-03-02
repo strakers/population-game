@@ -1,4 +1,6 @@
 import World from './components/World';
+import Location from './components/places/Location';
+import { getFlag, processCountryNameExceptions, countryList } from './support/flags';
 
 export const simulation1 = () => {
 
@@ -7,15 +9,14 @@ export const simulation1 = () => {
   const sue = world.addPerson({ name: "Susan Robinson", sex: "F", age: 26 });
 
   const
-    canada = world.addLocation('Canada'),
-    usa = world.addLocation("United States of America");
-
-  const
     personGroup = [jon, sue],
-    locationGroup = [canada, usa];
+    locationGroup = [
+      world.addLocation('Canada'),
+      world.addLocation("United States of America")
+    ];
 
-  jon.migrateTo(usa);
-  sue.migrateTo(canada);
+  jon.migrateTo(locationGroup[1]);
+  sue.migrateTo(locationGroup[0]);
 
   return {
     world,
@@ -24,6 +25,28 @@ export const simulation1 = () => {
   }
 }
 
-export default {
-  simulation1
-};
+export const simulation2 = () => {
+
+  const world = new World();
+  const people = new Map;
+  const countries = new Map;
+
+  people.set('jon', world.addPerson({ name: "John Smith", sex: "M", age: 29 }));
+  people.set('sue', world.addPerson({ name: "Susan Robinson", sex: "F", age: 26 }));
+
+  console.log('flags', getFlag('canada'));
+
+  countryList.forEach(name => {
+    const key = Location.slugify(name, processCountryNameExceptions);
+    countries.set(key, world.addLocation(name, key));
+  });
+
+  console.log('people', [...people.keys()])
+  console.log('countries', [...countries.keys()])
+
+  return {
+    world,
+    people,
+    countries,
+  }
+}
