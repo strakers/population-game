@@ -5,7 +5,7 @@ import '../styles/styles.scss';
 ; (function () {
 
   document.body.innerHTML = "";
-  document.body.innerHTML = "<ul class='instructions'><li>Drag a man onto a woman to make a new person.</li><li>Drag a person onto a country to make them a resident.</li></ul><hr />";
+  document.body.innerHTML = "<ul class='instructions'><li>Drag a person onto another person to make a new person.</li><li>Drag a person onto a country to make them a resident.</li></ul><hr />";
 
   // const world = new World();
   // const
